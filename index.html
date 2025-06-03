@@ -17,81 +17,213 @@
   <meta property="og:type" content="website" />
   <title>NEET (UG) 2025 Marks Calculator - Calculate Your Score Instantly</title>
   <style>
+    :root {
+      --primary-color: #007BFF;
+      --primary-hover: #0056b3;
+      --success-color: #28a745;
+      --success-hover: #218838;
+      --border-color: #dee2e6;
+      --bg-light: #f8f9fa;
+      --text-dark: #333;
+      --text-light: #666;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: #f2f2f2;
       margin: 0;
       padding: 20px;
+      line-height: 1.6;
+      color: var(--text-dark);
     }
 
     .container {
-      max-width: 650px;
+      max-width: 800px;
       margin: 0 auto;
       background: #fff;
-      padding: 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 24px;
-      color: #333;
+      margin-bottom: 30px;
+      color: var(--text-dark);
+      font-size: 2.2em;
+      font-weight: 700;
+    }
+
+    h3 {
+      color: var(--text-dark);
+      margin-bottom: 15px;
+      font-size: 1.4em;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: var(--bg-light);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
     }
 
     label {
       display: block;
-      font-weight: bold;
-      margin: 12px 0 6px;
+      font-weight: 600;
+      margin: 15px 0 8px;
+      color: var(--text-dark);
     }
 
     select,
     input[type="file"] {
       width: 100%;
-      padding: 7px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus,
+    input[type="file"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
     }
 
     button {
-      margin-top: 16px;
-      background: #007BFF;
+      margin-top: 20px;
+      background: var(--primary-color);
       color: #fff;
       border: none;
-      padding: 12px 20px;
+      padding: 12px 24px;
       font-size: 16px;
-      border-radius: 4px;
+      font-weight: 600;
+      border-radius: 6px;
       cursor: pointer;
       width: 100%;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background: #0056b3;
+      background: var(--primary-hover);
     }
 
     .results {
-      margin-top: 20px;
-      background: #fafafa;
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 4px;
+      margin-top: 25px;
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      border-radius: 8px;
     }
 
     .results p {
-      margin: 6px 0;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .results strong {
+      color: var(--text-dark);
+      font-weight: 600;
     }
 
     .wrong-list {
-      max-height: 120px;
+      max-height: 150px;
       overflow-y: auto;
       background: #fff;
-      border: 1px solid #ccc;
-      padding: 8px;
-      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 6px;
       font-family: monospace;
       white-space: nowrap;
+      margin-top: 10px;
+    }
+
+    .instructions {
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .instructions ol {
+      margin: 15px 0;
+      padding-left: 25px;
+    }
+
+    .instructions li {
+      margin: 12px 0;
+      color: var(--text-light);
+    }
+
+    .instructions code {
+      background: #fff;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .copy-button {
+      background: var(--success-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 15px 0;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .copy-button:hover {
+      background: var(--success-hover);
+    }
+
+    pre {
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .keyboard-shortcut {
+      background: #e9ecef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .instructions {
+        padding: 15px;
+      }
     }
   </style>
 </head>
@@ -100,28 +232,82 @@
   <div class="container">
     <h1>NEET (UG) 2025 Marks Calculator</h1>
 
-    <label for="bookletSelect">Select Test Booklet Code</label>
-    <select id="bookletSelect">
-      <option value="">-- Choose Booklet Code --</option>
-      <option value="45">45</option>
-      <option value="46">46</option>
-      <option value="47">47</option>
-      <option value="48">48</option>
-    </select>
+    <div class="section">
+      <h3>Calculate Your Marks</h3>
+      <label for="bookletSelect">Select Test Booklet Code</label>
+      <select id="bookletSelect">
+        <option value="">-- Choose Booklet Code --</option>
+        <option value="45">45</option>
+        <option value="46">46</option>
+        <option value="47">47</option>
+        <option value="48">48</option>
+      </select>
 
-    <label for="respFile">Upload Recorded Responses CSV</label>
-    <input type="file" id="respFile" accept=".csv" />
+      <label for="respFile">Upload Recorded Responses CSV</label>
+      <input type="file" id="respFile" accept=".csv" />
 
-    <button id="computeBtn">Calculate Marks</button>
+      <button id="computeBtn">Calculate Marks</button>
 
-    <div id="results" class="results" style="display:none;">
-      <p><strong>Total Questions:</strong> <span id="totalQ"></span></p>
-      <p><strong>Correct (+4):</strong> <span id="correctCount"></span></p>
-      <p><strong>Incorrect (−1):</strong> <span id="incorrectCount"></span></p>
-      <p><strong>Blank (0):</strong> <span id="blankCount"></span></p>
-      <p><strong>Total Score:</strong> <span id="totalScore"></span></p>
-      <p><strong>Incorrect Q-Nos:</strong></p>
-      <div id="wrongList" class="wrong-list"></div>
+      <div id="results" class="results" style="display:none;">
+        <p><strong>Total Questions:</strong> <span id="totalQ"></span></p>
+        <p><strong>Correct (+4):</strong> <span id="correctCount"></span></p>
+        <p><strong>Incorrect (−1):</strong> <span id="incorrectCount"></span></p>
+        <p><strong>Blank (0):</strong> <span id="blankCount"></span></p>
+        <p><strong>Total Score:</strong> <span id="totalScore"></span></p>
+        <p><strong>Incorrect Q-Nos:</strong></p>
+        <div id="wrongList" class="wrong-list"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>How to Download Your Response CSV</h3>
+      <ol>
+        <li>Go to the NEET OMR Challenge page and log in</li>
+        <li>Open your browser's Developer Tools:
+          <ul>
+            <li>Chrome/Edge: Press <span class="keyboard-shortcut">F12</span> or <span
+                class="keyboard-shortcut">Ctrl+Shift+I</span></li>
+            <li>Firefox: Press <span class="keyboard-shortcut">F12</span> or <span
+                class="keyboard-shortcut">Ctrl+Shift+I</span></li>
+            <li>Safari: Enable Developer Tools in Preferences → Advanced, then press <span
+                class="keyboard-shortcut">Option+Command+I</span></li>
+          </ul>
+        </li>
+        <li>Go to the "Console" tab in Developer Tools</li>
+        <li>Copy and paste this code:</li>
+        <pre><code id="downloadCode">(function() {
+  const grid = document.querySelector("[id^='ctl00_LoginContent_grOMR']");
+  if (!grid) {
+    console.error("OMR table not found. Make sure you are on the Challenge OMR page and logged in.");
+    return;
+  }
+  const rows = Array.from(grid.querySelectorAll("tr"));
+  const lines = ["Qno,RecordedResponse"];
+  rows.forEach(tr => {
+    const qSpan = tr.querySelector("span[id$='_lbl_QuestionNo']");
+    const rSpan = tr.querySelector("span[id$='_lbl_RAnswer']");
+    if (qSpan && rSpan) {
+      const qno = qSpan.textContent.trim().padStart(3, "0");
+      const raw = rSpan.textContent.trim();
+      const ans = (raw === "-" ? "" : raw);
+      lines.push(`${qno},${ans}`);
+    }
+  });
+  const csvContent = lines.join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "NEET_OMR_Responses.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+})();</code></pre>
+        <button class="copy-button" onclick="copyCode()">Copy Code</button>
+        <li>Press Enter to run the code</li>
+        <li>Your responses will be automatically downloaded as "NEET_OMR_Responses.csv"</li>
+      </ol>
     </div>
   </div>
 
@@ -294,6 +480,24 @@
         document.getElementById('results').style.display = 'block';
       });
     });
+
+    // Add copy function
+    function copyCode() {
+      const codeElement = document.getElementById('downloadCode');
+      const textArea = document.createElement('textarea');
+      textArea.value = codeElement.textContent;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      const button = document.querySelector('.copy-button');
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 2000);
+    }
   </script>
 </body>
 
