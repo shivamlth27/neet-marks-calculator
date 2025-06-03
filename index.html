@@ -225,6 +225,95 @@
         padding: 15px;
       }
     }
+
+    .subject-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .subject {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .subject p {
+      margin: 8px 0;
+    }
+
+    .subject strong {
+      color: var(--primary-color);
+    }
+
+    .total-marks {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      text-align: center;
+    }
+
+    .score-item {
+      padding: 15px;
+      background: var(--bg-light);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .score-item.total {
+      grid-column: 1 / -1;
+      background: var(--primary-color);
+      color: white;
+      font-size: 1.2em;
+      padding: 20px;
+    }
+
+    .score-label {
+      display: block;
+      font-size: 0.9em;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .score-item.total .score-label {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .score-value {
+      display: block;
+      font-size: 1.5em;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .score-item.total .score-value {
+      color: white;
+      font-size: 1.8em;
+    }
+
+    @media (max-width: 600px) {
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score-item {
+        padding: 12px;
+      }
+
+      .score-item.total {
+        padding: 15px;
+      }
+    }
   </style>
 </head>
 
@@ -249,12 +338,55 @@
       <button id="computeBtn">Calculate Marks</button>
 
       <div id="results" class="results" style="display:none;">
-        <p><strong>Total Questions:</strong> <span id="totalQ"></span></p>
-        <p><strong>Correct (+4):</strong> <span id="correctCount"></span></p>
-        <p><strong>Incorrect (−1):</strong> <span id="incorrectCount"></span></p>
-        <p><strong>Blank (0):</strong> <span id="blankCount"></span></p>
-        <p><strong>Total Score:</strong> <span id="totalScore"></span></p>
-        <p><strong>Incorrect Q-Nos:</strong></p>
+        <div class="total-marks">
+          <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary-color);">Your NEET Score</h3>
+          <div class="score-grid">
+            <div class="score-item">
+              <span class="score-label">Total Questions</span>
+              <span class="score-value" id="totalQ">0</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">Correct (+4)</span>
+              <span class="score-value" id="correctCount">0</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">Incorrect (−1)</span>
+              <span class="score-value" id="incorrectCount">0</span>
+            </div>
+            <div class="score-item">
+              <span class="score-label">Blank (0)</span>
+              <span class="score-value" id="blankCount">0</span>
+            </div>
+            <div class="score-item total">
+              <span class="score-label">Total Score</span>
+              <span class="score-value" id="totalScore">0</span>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 30px; color: var(--text-dark);">Subject-wise Analysis:</h4>
+        <div class="subject-results">
+          <div class="subject">
+            <p><strong>Physics (Q1-45):</strong></p>
+            <p>Correct: <span id="physicsCorrect">0</span></p>
+            <p>Incorrect: <span id="physicsIncorrect">0</span></p>
+            <p>Score: <span id="physicsScore">0</span></p>
+          </div>
+          <div class="subject">
+            <p><strong>Chemistry (Q46-90):</strong></p>
+            <p>Correct: <span id="chemistryCorrect">0</span></p>
+            <p>Incorrect: <span id="chemistryIncorrect">0</span></p>
+            <p>Score: <span id="chemistryScore">0</span></p>
+          </div>
+          <div class="subject">
+            <p><strong>Biology (Q91-180):</strong></p>
+            <p>Correct: <span id="biologyCorrect">0</span></p>
+            <p>Incorrect: <span id="biologyIncorrect">0</span></p>
+            <p>Score: <span id="biologyScore">0</span></p>
+          </div>
+        </div>
+
+        <p style="margin-top: 20px;"><strong>Incorrect Q-Nos:</strong></p>
         <div id="wrongList" class="wrong-list"></div>
       </div>
     </div>
@@ -456,35 +588,63 @@
         let total = 0, correct = 0, incorrect = 0, blank = 0;
         const wrongQnos = [];
 
+        // Subject-wise counters
+        let physicsCorrect = 0, physicsIncorrect = 0;
+        let chemistryCorrect = 0, chemistryIncorrect = 0;
+        let biologyCorrect = 0, biologyIncorrect = 0;
+
         for (const [qno, correctOpt] of Object.entries(keyMap)) {
           total++;
           const recRaw = (recordedMap[qno] || '').trim();
-          // Treat "-" as blank
           const rec = (recRaw === '-' ? '' : recRaw);
+          const qnoNum = parseInt(qno);
 
           if (rec === '') {
             blank++;
           } else {
-            // correctOpt could be "1,2" or "3" etc.
-            // Split on comma and see if rec matches any
             const possibles = correctOpt.split(',').map(x => x.trim());
             if (possibles.includes(rec)) {
               correct++;
+              // Update subject-wise correct counts
+              if (qnoNum <= 45) physicsCorrect++;
+              else if (qnoNum <= 90) chemistryCorrect++;
+              else biologyCorrect++;
             } else {
               incorrect++;
               wrongQnos.push(qno);
+              // Update subject-wise incorrect counts
+              if (qnoNum <= 45) physicsIncorrect++;
+              else if (qnoNum <= 90) chemistryIncorrect++;
+              else biologyIncorrect++;
             }
           }
         }
 
         const totalScore = (correct * 4) + (incorrect * -1);
+        const physicsScore = (physicsCorrect * 4) + (physicsIncorrect * -1);
+        const chemistryScore = (chemistryCorrect * 4) + (chemistryIncorrect * -1);
+        const biologyScore = (biologyCorrect * 4) + (biologyIncorrect * -1);
 
+        // Update total results
         document.getElementById('totalQ').innerText = total;
         document.getElementById('correctCount').innerText = correct;
         document.getElementById('incorrectCount').innerText = incorrect;
         document.getElementById('blankCount').innerText = blank;
         document.getElementById('totalScore').innerText = totalScore;
         document.getElementById('wrongList').innerText = wrongQnos.join(', ');
+
+        // Update subject-wise results
+        document.getElementById('physicsCorrect').innerText = physicsCorrect;
+        document.getElementById('physicsIncorrect').innerText = physicsIncorrect;
+        document.getElementById('physicsScore').innerText = physicsScore;
+
+        document.getElementById('chemistryCorrect').innerText = chemistryCorrect;
+        document.getElementById('chemistryIncorrect').innerText = chemistryIncorrect;
+        document.getElementById('chemistryScore').innerText = chemistryScore;
+
+        document.getElementById('biologyCorrect').innerText = biologyCorrect;
+        document.getElementById('biologyIncorrect').innerText = biologyIncorrect;
+        document.getElementById('biologyScore').innerText = biologyScore;
 
         document.getElementById('results').style.display = 'block';
       });
