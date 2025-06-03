@@ -77,17 +77,3 @@ This script will:
 4. Automatically download the file as "NEET_OMR_Responses.csv"
 
 The downloaded CSV file will be compatible with this marks calculator.
-
-## Hosting
-
-This application is hosted on GitHub Pages. You can access it at: [Your GitHub Pages URL will appear here after deployment]
-
-## Local Development
-
-To run this locally:
-1. Clone this repository
-2. Open `index.html` in your web browser
-
-## License
-
-MIT License 
