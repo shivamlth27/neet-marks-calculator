@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shivamlth27.github.io/neet-marks-calculator/sitemap.xml 
